@@ -48,6 +48,7 @@ open class ParagraphNativeView: UIView, EJBlockStyleApplicable, EJConfigurableVi
     public func apply(style: EJBlockStyle) {
         guard let style = style as? EJParagraphBlockStyle else { return }
         textView.linkTextAttributes = style.linkTextAttributes
+        textView.textColor = style.color
         backgroundColor = style.backgroundColor
         layer.cornerRadius = style.cornerRadius
     }
