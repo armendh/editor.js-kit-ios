@@ -9,7 +9,7 @@
 import Foundation
 
 ///
-public enum ListBlockStyle: String, Decodable {
+public enum ListBlockStyle: String, Codable {
     case unordered
     case ordered
 }
@@ -40,6 +40,9 @@ public class ListBlockContent: EJAbstractBlockContent {
         
     }
     
+    public func encode(container: inout KeyedEncodingContainer<EJAbstractBlock.CodingKeys>) throws {
+        try container.encode(self, forKey: .data)
+    }
 }
 
 ///

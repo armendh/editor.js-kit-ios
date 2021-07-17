@@ -19,15 +19,22 @@ public class LinkBlockContent: EJAbstractBlockContent {
         return items.first
     }
     
-    enum CodingKeys: String, CodingKey { case link, meta }
+    enum CodingKeys: String, CodingKey {
+        case link = "link"
+        case items = "meta"
+        
+    }
     
     required public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         link = try container.decode(URL.self, forKey: .link)
-        items = [ try container.decode(LinkBlockContentItem.self, forKey: .meta) ]
+        items = [ try container.decode(LinkBlockContentItem.self, forKey: .items) ]
         items.forEach { $0.formattedLink = LinkFormatterService.format(link: link)}
     }
     
+    public func encode(container: inout KeyedEncodingContainer<EJAbstractBlock.CodingKeys>) throws {
+        try container.encode(self, forKey: .data)
+    }
 }
 
 ///
@@ -43,13 +50,16 @@ public class LinkBlockContentItem: EJAbstractBlockContentItem {
     public var descriptionAttributedString: NSAttributedString?
     
     enum CodingKeys: String, CodingKey {
-        case title, site_name, description, image
+        case title = "title"
+        case siteName = "site_name"
+        case description = "description"
+        case image = "image"
     }
     
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         title = try container.decode(String.self, forKey: .title)
-        siteName = try container.decodeIfPresent(String.self, forKey: .site_name)
+        siteName = try container.decodeIfPresent(String.self, forKey: .siteName)
         description = try container.decodeIfPresent(String.self, forKey: .description)
         image = try container.decodeIfPresent(ImageFile.self, forKey: .image)
         if let style = EJKit.shared.style.getStyle(forBlockType: EJNativeBlockType.linkTool) as? EJLinkBlockStyle {

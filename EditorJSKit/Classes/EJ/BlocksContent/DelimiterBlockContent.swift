@@ -18,6 +18,10 @@ public class DelimiterBlockContent: EJAbstractBlockContent {
         return items.first
     }
     
+    public func encode(container: inout KeyedEncodingContainer<EJAbstractBlock.CodingKeys>) throws {
+        try container.encode(self, forKey: .data)
+    }
+    
     enum CodingKeys: CodingKey {}
 }
 

@@ -9,16 +9,17 @@
 import Foundation
 
 ///
-public protocol EJAbstractBlockContentItem: Decodable {}
+public protocol EJAbstractBlockContentItem: Codable {}
 
 ///
-public protocol EJAbstractBlockContent: Decodable {
+public protocol EJAbstractBlockContent: Codable {
     var numberOfItems: Int { get }
     func getItem(atIndex index: Int) -> EJAbstractBlockContentItem?
+    func encode(container: inout KeyedEncodingContainer<EJAbstractBlock.CodingKeys>) throws
 }
 
 ///
-public protocol EJAbstractBlockProtocol: Decodable {
+public protocol EJAbstractBlockProtocol: Codable {
     var type: EJAbstractBlockType { get }
     var data: EJAbstractBlockContent { get }
 }
@@ -76,4 +77,9 @@ open class EJAbstractBlock: EJAbstractBlockProtocol {
                 debugDescription: "Unable to parse block - no native or custom type found"))
     }
     
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try type.encode(container: &container)
+        try data.encode(container: &container)
+    }
 }

@@ -17,6 +17,10 @@ open class ImageBlockContent: EJAbstractBlockContent {
         items = [ try ImageBlockContentItem(from: decoder)]
     }
     
+    public func encode(container: inout KeyedEncodingContainer<EJAbstractBlock.CodingKeys>) throws {
+        try container.encode(self, forKey: .data)
+    }
+    
     open func getItem(atIndex index: Int) -> EJAbstractBlockContentItem? {
         guard index == 0 else { return nil }
         return items.first
@@ -52,7 +56,7 @@ public class ImageBlockContentItem: EJAbstractBlockContentItem {
 }
 
 ///
-public class ImageFile: Decodable {
+public class ImageFile: Codable {
     enum CodingKeys: String, CodingKey { case url }
     
     public let url: URL

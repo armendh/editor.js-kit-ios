@@ -17,6 +17,10 @@ public class HeaderBlockContent: EJAbstractBlockContent {
         items = [try HeaderBlockContentItem(from: decoder) ]
     }
     
+    public func encode(container: inout KeyedEncodingContainer<EJAbstractBlock.CodingKeys>) throws {
+        try container.encode(self, forKey: .data)
+    }
+    
     public func getItem(atIndex index: Int) -> EJAbstractBlockContentItem? {
         guard index == 0 else { return nil }
         return items.first
